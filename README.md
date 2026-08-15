@@ -12,7 +12,7 @@ The code includes:
 
 ## Usage
 
-All analyses were conducted in R. Scripts are numbered according to their intended execution order. Because the underlying administrative data are not publicly available, the code cannot be executed without authorised access to the original dataset.
+All analyses were conducted in R version 4.5.2 (R Foundation for Statistical Computing, Vienna, Austria). Scripts are numbered according to their intended execution order. Because the underlying administrative data are not publicly available, the code cannot be executed without authorised access to the original dataset.
 
 ## Structure
 
