@@ -484,4 +484,43 @@ save(
   file = cohort_checks_file
 )
 
+adult_pneumonia_before_birth_exclusion <- pneu2 %>%
+  filter(
+    !as.character(age) %in%
+      c("0-4", "5-9", "10-14", "15-19")
+  )
+
+cohort_flow_counts <- tibble(
+  stage = c(
+    "Diagnosis records",
+    "Patient-information records",
+    "Pneumonia diagnosis records",
+    "Unique pneumonia hospitalisations",
+    "Hospitalisations linked to patient data",
+    "Excluded: age <20 years",
+    "Excluded: admission type birth",
+    "Final analytical cohort"
+  ),
+  n = c(
+    nrow(dia_eci),
+    nrow(min2),
+    sum(is_pneumonia_code(dia_eci$dia)),
+    nrow(pneumonia_keys),
+    nrow(pneu2),
+    sum(
+      as.character(pneu2$age) %in%
+        c("0-4", "5-9", "10-14", "15-19")
+    ),
+    sum(
+      as.character(
+        adult_pneumonia_before_birth_exclusion$admission_type
+      ) == "3",
+      na.rm = TRUE
+    ),
+    nrow(df)
+  )
+)
+
+cohort_flow_counts
+
 
