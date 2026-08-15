@@ -634,6 +634,34 @@ classification_summary
 pu_thresholds
 agreement_results
 
+rule_detail_counts <- df %>%
+  mutate(
+    rule_step = case_when(
+      hap == 1L ~ "ICD-10 HAP",
 
+      admission_type == "Scheduled" ~
+        "Scheduled admission",
+
+      admission_type == "Transfer" &
+        pneumonia_secondary_diagnosis == 1L ~
+        "Transfer and secondary pneumonia",
+
+      place_of_stay == "Acute" &
+        pneumonia_secondary_diagnosis == 1L ~
+        "Prior acute stay and secondary pneumonia",
+
+      place_of_stay == "Psych/Rehab" &
+        pneumonia_secondary_diagnosis == 1L ~
+        "Prior Psych/Rehab stay and secondary pneumonia",
+
+      TRUE ~ "CAP"
+    )
+  ) %>%
+  count(rule_step, name = "n") %>%
+  mutate(
+    percentage = round(100 * n / nrow(df), 1)
+  )
+
+rule_detail_counts
 
 
