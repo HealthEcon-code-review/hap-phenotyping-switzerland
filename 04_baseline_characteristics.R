@@ -463,8 +463,10 @@ rule_component_labels <- c(
   "Scheduled admission" = "Scheduled admission",
   "Transfer and secondary diagnosis" =
     "Transfer admission and secondary pneumonia",
-  "Prior acute/psychiatric/rehabilitation stay and secondary diagnosis" =
-    "Prior acute, psychiatric, or rehabilitation stay and secondary pneumonia",
+  "Prior acute stay and secondary diagnosis" =
+    "Prior acute stay and secondary pneumonia",
+  "Prior psychiatric/rehabilitation stay" =
+    "Prior psychiatric or rehabilitation stay",
   "CAP" = "Rule-based CAP"
 )
 
@@ -555,3 +557,4 @@ save_manuscript_table(
   ),
   path = table_s2_file
 )
+
