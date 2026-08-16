@@ -136,7 +136,8 @@ rule_source_levels <- c(
   "ICD-10 HAP",
   "Scheduled admission",
   "Transfer and secondary diagnosis",
-  "Prior acute/psychiatric/rehabilitation stay and secondary diagnosis",
+  "Prior acute stay and secondary diagnosis",
+  "Prior psychiatric/rehabilitation stay",
   "CAP"
 )
 
@@ -147,9 +148,11 @@ df <- df_CV %>%
       admission_type == "Scheduled" ~ "Scheduled admission",
       admission_type == "Transfer" &
         pneumonia_secondary_diagnosis == 1L ~ "Transfer and secondary diagnosis",
-      place_of_stay %in% c("Acute", "Psych/Rehab") &
+      place_of_stay == "Acute" &
         pneumonia_secondary_diagnosis == 1L ~
-        "Prior acute/psychiatric/rehabilitation stay and secondary diagnosis",
+        "Prior acute stay and secondary diagnosis",
+      place_of_stay == "Psych/Rehab" ~
+        "Prior psychiatric/rehabilitation stay",
       TRUE ~ "CAP"
     ),
     HAP_rule_source = factor(HAP_rule_source, levels = rule_source_levels),
@@ -329,7 +332,6 @@ pu_thresholds <- tibble(
   )
 ) %>%
   mutate(share = n_hap / nrow(df_pu))
-
 
 # Agreement and reclassification ---------------------------------------------
 
@@ -638,22 +640,21 @@ rule_detail_counts <- df %>%
   mutate(
     rule_step = case_when(
       hap == 1L ~ "ICD-10 HAP",
-
+      
       admission_type == "Scheduled" ~
         "Scheduled admission",
-
+      
       admission_type == "Transfer" &
         pneumonia_secondary_diagnosis == 1L ~
         "Transfer and secondary pneumonia",
-
+      
       place_of_stay == "Acute" &
         pneumonia_secondary_diagnosis == 1L ~
         "Prior acute stay and secondary pneumonia",
-
-      place_of_stay == "Psych/Rehab" &
-        pneumonia_secondary_diagnosis == 1L ~
-        "Prior Psych/Rehab stay and secondary pneumonia",
-
+      
+      place_of_stay == "Psych/Rehab" ~
+        "Prior Psych/Rehab stay",
+      
       TRUE ~ "CAP"
     )
   ) %>%
@@ -663,5 +664,4 @@ rule_detail_counts <- df %>%
   )
 
 rule_detail_counts
-
 
