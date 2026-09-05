@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
   library(dplyr)
   library(comorbidity)
 })
-
+ 
 # Analysis settings ------------------------------------------------------------
 
 last_study_year <- 2019L
