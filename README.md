@@ -1,6 +1,6 @@
 # Code Repository – Phenotyping Hospital-Acquired Pneumonia in Administrative Data
 
-This repository contains the R code used for cohort construction, pneumonia phenotyping, statistical analyses, and figure generation in the manuscript **“Administrative phenotyping of hospital-acquired pneumonia for surveillance and hospital outcome measurement: a Swiss nationwide cohort study”**, submitted for peer review to the *Journal of Hospital Infection*.
+This repository contains the R code used for cohort construction, pneumonia phenotyping, statistical analyses, and figure generation in the manuscript **“Phenotyping hospital-acquired pneumonia in administrative data: implications for outcome measurement and hospital performance in a Swiss nationwide cohort study”**, submitted for peer review to the *Journal of Hospital Infection*.
 
 The code includes:
 
