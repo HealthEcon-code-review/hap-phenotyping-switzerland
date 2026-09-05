@@ -8,8 +8,8 @@
 #   PNEUMONIA_DATA_DIR/df_classified.RData containing `df`
 #   PNEUMONIA_DATA_DIR/classification_checks.RData containing dynamically
 #   calculated rule-based and PU-learning checks
-#   PNEUMONIA_OUTPUT_DIR/Table2_reclassification_phenotyping_lancet.docx
-#   PNEUMONIA_OUTPUT_DIR/pu_feature_importance_lancet.docx
+#   PNEUMONIA_OUTPUT_DIR/Table2_reclassification_phenotyping.docx
+#   PNEUMONIA_OUTPUT_DIR/pu_feature_importance.docx
 #
 # Set the directories locally, for example in an untracked .Renviron file:
 #   PNEUMONIA_DATA_DIR=/path/to/derived/data
@@ -62,12 +62,12 @@ checks_file <- file.path(data_dir, "classification_checks.RData")
 
 reclassification_table_file <- file.path(
   output_dir,
-  "Table2_reclassification_phenotyping_lancet.docx"
+  "Table2_reclassification_phenotyping.docx"
 )
 
 feature_importance_file <- file.path(
   output_dir,
-  "pu_feature_importance_lancet.docx"
+  "pu_feature_importance.docx"
 )
 
 
@@ -412,16 +412,16 @@ if (anyNA(df$class_group)) {
 
 # Reclassification table -------------------------------------------------------
 
-fmt_lancet <- function(x, digits = 2L) {
+fmt <- function(x, digits = 2L) {
   x <- round(x, digits)
   x[abs(x) < 10^(-digits)] <- 0
   output <- formatC(x, format = "f", digits = digits)
   output <- sub("^-", "−", output)
-  gsub("\\.", "·", output)
+  gsub("\\.", ".", output)
 }
 
-fmt_pct_lancet <- function(x, digits = 1L) {
-  paste0(fmt_lancet(100 * x, digits), "%")
+fmt_pct <- function(x, digits = 1L) {
+  paste0(fmt(100 * x, digits), "%")
 }
 
 reclassification_table <- df %>%
@@ -464,14 +464,14 @@ reclassification_table <- df %>%
   transmute(
     `Phenotyping group` = class_group,
     Hospitalisations = formatC(n, format = "d", big.mark = ","),
-    `ECI, median` = fmt_lancet(eci, 0L),
-    `Length of stay, median days` = fmt_lancet(length_of_stay, 0L),
-    `ICU admission` = fmt_pct_lancet(icu, 1L),
-    `Mechanical ventilation` = fmt_pct_lancet(ventilation, 1L),
+    `ECI, median` = fmt(eci, 0L),
+    `Length of stay, median days` = fmt(length_of_stay, 0L),
+    `ICU admission` = fmt_pct(icu, 1L),
+    `Mechanical ventilation` = fmt_pct(ventilation, 1L),
     `Pneumonia as secondary diagnosis` =
-      fmt_pct_lancet(secondary_diagnosis, 1L),
-    `Emergency admission` = fmt_pct_lancet(emergency_admission, 1L),
-    `Home before admission` = fmt_pct_lancet(home_before_admission, 1L)
+      fmt_pct(secondary_diagnosis, 1L),
+    `Emergency admission` = fmt_pct(emergency_admission, 1L),
+    `Home before admission` = fmt_pct(home_before_admission, 1L)
   )
 
 reclassification_flextable <-
@@ -579,10 +579,10 @@ importance_table <- feature_importance %>%
   arrange(desc(Gain_share)) %>%
   transmute(
     Variable,
-    `Share of total model gain` = fmt_pct_lancet(Gain_share, 1L),
-    Gain = fmt_lancet(Gain, 3L),
-    Cover = fmt_lancet(Cover, 3L),
-    Frequency = fmt_lancet(Frequency, 3L)
+    `Share of total model gain` = fmt_pct(Gain_share, 1L),
+    Gain = fmt(Gain, 3L),
+    Cover = fmt(Cover, 3L),
+    Frequency = fmt(Frequency, 3L)
   )
 
 importance_flextable <- flextable::flextable(importance_table) %>%
