@@ -1,5 +1,4 @@
 # Phenotyping Hospital-Acquired Pneumonia in Administrative Data
-# Phenotyping Hospital-Acquired Pneumonia in Administrative Data
 # 02 - Cohort construction and data cleaning
 #
 # Expected inputs:
