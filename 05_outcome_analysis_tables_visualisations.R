@@ -5,16 +5,12 @@
 #   PNEUMONIA_DATA_DIR/df_classified.RData containing an object named df
 #
 # Created outputs:
-#   PNEUMONIA_OUTPUT_DIR/tables/Appendix_model_tables_Lancet.docx
+#   PNEUMONIA_OUTPUT_DIR/tables/Appendix_model_tables.docx
 #   PNEUMONIA_OUTPUT_DIR/figures/Figure1_adjusted_hazard_ratios.pdf
 #   PNEUMONIA_OUTPUT_DIR/figures/Figure1_adjusted_hazard_ratios.tiff
 #   PNEUMONIA_OUTPUT_DIR/figures/Figure2_CAP_HAP_hospital_mortality.pdf
 #   PNEUMONIA_OUTPUT_DIR/figures/Figure2_CAP_HAP_hospital_mortality.tiff
 #   PNEUMONIA_OUTPUT_DIR/outcome_analysis_results.RData
-#
-# The models, tables, and figures are deliberately generated in one run.
-# No previously saved model or plotting object is loaded, preventing stale
-# estimates from being combined with current data.
 #
 # Set the directories locally, for example in an untracked .Renviron file:
 #   PNEUMONIA_DATA_DIR=/path/to/derived/data
@@ -73,7 +69,7 @@ input_file <- file.path(data_dir, "df_classified.RData")
 
 model_tables_file <- file.path(
   tables_dir,
-  "Appendix_model_tables_Lancet.docx"
+  "Appendix_model_tables.docx"
 )
 
 figure1_pdf <- file.path(
@@ -1530,7 +1526,7 @@ use_decimal_point <- function(x) {
   stringr::str_replace_all(
     x,
     stringr::fixed("."),
-    "·"
+    "."
   )
 }
 
@@ -1547,7 +1543,7 @@ format_effect_ci <- function(
   use_decimal_point(formatted)
 }
 
-format_p_lancet <- function(p_value) {
+format_p <- function(p_value) {
   vapply(
     p_value,
     function(p) {
@@ -1555,7 +1551,7 @@ format_p_lancet <- function(p_value) {
         return("")
       }
       if (p < 0.0001) {
-        return("<0·0001")
+        return("<0.0001")
       }
 
       formatted <- format(
@@ -1569,7 +1565,7 @@ format_p_lancet <- function(p_value) {
   )
 }
 
-make_lancet_model_table <- function(
+make_model_table <- function(
     fit,
     effect_type = c(
       "OR",
@@ -1612,7 +1608,7 @@ make_lancet_model_table <- function(
       estimates$conf_low,
       estimates$conf_high
     ),
-    p_value = format_p_lancet(estimates$p_value)
+    p_value = format_p(estimates$p_value)
   )
 
   names(output) <- c(
@@ -1623,7 +1619,7 @@ make_lancet_model_table <- function(
   output
 }
 
-as_lancet_flextable <- function(table_data) {
+as_flextable <- function(table_data) {
   effect_column <- names(table_data)[2]
 
   flextable::flextable(table_data) %>%
@@ -1794,7 +1790,7 @@ model_table_results <- purrr::pmap(
       effect_type,
       caption,
       fit) {
-    table_data <- make_lancet_model_table(
+    table_data <- make_model_table(
       fit,
       effect_type = effect_type,
       strict_labels = TRUE
@@ -1806,7 +1802,7 @@ model_table_results <- purrr::pmap(
       caption = caption,
       note = model_table_note(table_no),
       data = table_data,
-      flextable = as_lancet_flextable(table_data)
+      flextable = as_flextable(table_data)
     )
   }
 )
@@ -2000,7 +1996,7 @@ figure1_plot <- ggplot(
     breaks = scales::breaks_pretty(n = 4),
     labels = scales::label_number(
       accuracy = 0.1,
-      decimal.mark = "·"
+      decimal.mark = "."
     )
   ) +
   labs(
