@@ -1,4 +1,5 @@
 # Phenotyping Hospital-Acquired Pneumonia in Administrative Data
+# Phenotyping Hospital-Acquired Pneumonia in Administrative Data
 # 02 - Cohort construction and data cleaning
 #
 # Expected inputs:
@@ -484,6 +485,7 @@ save(
   file = cohort_checks_file
 )
 
+
 adult_pneumonia_before_birth_exclusion <- pneu2 %>%
   filter(
     !as.character(age) %in%
@@ -522,5 +524,3 @@ cohort_flow_counts <- tibble(
 )
 
 cohort_flow_counts
-
-
