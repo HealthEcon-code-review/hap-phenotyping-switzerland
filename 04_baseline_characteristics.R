@@ -185,12 +185,12 @@ df_characteristics <- df %>%
 
 # Formatting functions --------------------------------------------------------
 
-fmt_lancet <- function(x, digits = 1L) {
+fmt <- function(x, digits = 1L) {
   x <- round(x, digits)
   x[abs(x) < 10^(-digits)] <- 0
   output <- formatC(x, format = "f", digits = digits)
   output <- sub("^-", "−", output)
-  gsub("\\.", "·", output)
+  gsub("\\.", ".", output)
 }
 
 fmt_n <- function(x) {
@@ -201,18 +201,18 @@ fmt_n_pct <- function(n, denominator, digits = 1L) {
   paste0(
     fmt_n(n),
     " (",
-    fmt_lancet(100 * n / denominator, digits),
+    fmt(100 * n / denominator, digits),
     "%)"
   )
 }
 
 fmt_median_iqr <- function(median_value, q1, q3, digits = 1L) {
   paste0(
-    fmt_lancet(median_value, digits),
+    fmt(median_value, digits),
     " (",
-    fmt_lancet(q1, digits),
+    fmt(q1, digits),
     "–",
-    fmt_lancet(q3, digits),
+    fmt(q3, digits),
     ")"
   )
 }
